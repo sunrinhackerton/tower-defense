@@ -18,12 +18,13 @@ public class BuildSite2D : MonoBehaviour, IPointerClickHandler
 
     [Header("Visual Feedback")]
     [Tooltip("Color shown when the site is available to build.")]
-    public Color availableColor = new Color(0.4f, 1f, 0.4f, 0.35f);
+    public Color availableColor = Color.white;
     [Tooltip("Color shown after a tower is built here.")]
-    public Color builtColor     = new Color(0.5f, 0.5f, 0.5f, 0.15f);
+    public Color builtColor     = new Color(0.3f, 0.3f, 0.3f, 0.8f);
 
     // State
     public bool HasTower { get; private set; }
+    public Tower2D builtTower;
 
     private SpriteRenderer _sr;
 
@@ -41,7 +42,14 @@ public class BuildSite2D : MonoBehaviour, IPointerClickHandler
     {
         if (HasTower)
         {
-            Debug.Log("[BuildSite] 이미 타워가 배치된 자리입니다.");
+            if (builtTower != null && BuildManager2D.Instance != null)
+            {
+                BuildManager2D.Instance.OpenTowerInfo(builtTower);
+            }
+            else
+            {
+                Debug.Log("[BuildSite] 이미 타워가 배치된 자리입니다.");
+            }
             return;
         }
 
@@ -55,5 +63,11 @@ public class BuildSite2D : MonoBehaviour, IPointerClickHandler
     {
         HasTower = true;
         _sr.color = builtColor;
+    }
+
+    public void SetEmpty()
+    {
+        HasTower = false;
+        _sr.color = availableColor;
     }
 }

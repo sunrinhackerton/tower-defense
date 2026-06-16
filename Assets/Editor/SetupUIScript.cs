@@ -46,7 +46,7 @@ public class SetupUIScript
             if (b3) UnityEditor.Events.UnityEventTools.AddPersistentListener(b3.onClick, new UnityEngine.Events.UnityAction(bm.BuildBarracks));
             
             Button b4 = GameObject.Find("Btn_Cancel")?.GetComponent<Button>();
-            if (b4) UnityEditor.Events.UnityEventTools.AddPersistentListener(b4.onClick, new UnityEngine.Events.UnityAction(bm.CloseBuildUI));
+            if (b4) UnityEditor.Events.UnityEventTools.AddPersistentListener(b4.onClick, new UnityEngine.Events.UnityAction(bm.CloseAllUI));
 
             // Load prefabs
             bm.ballistaPrefab = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/Tower_Ballista.prefab");

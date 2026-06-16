@@ -39,15 +39,23 @@ public class WaveManager2D : MonoBehaviour
         if (Instance == null) Instance = this;
         else Destroy(gameObject);
 
-        // Auto-build waves array
+        // Auto-build 30 waves array with increasing difficulty
         if (goblinPrefab != null && knightPrefab != null && gargoylePrefab != null)
         {
-            waves = new WaveData[]
+            waves = new WaveData[30];
+            for (int i = 0; i < 30; i++)
             {
-                new WaveData { enemyPrefab = goblinPrefab, count = 10, spawnInterval = 0.5f },
-                new WaveData { enemyPrefab = knightPrefab, count = 3, spawnInterval = 3.0f },
-                new WaveData { enemyPrefab = gargoylePrefab, count = 5, spawnInterval = 1.5f }
-            };
+                GameObject prefab = goblinPrefab;
+                int count = 5 + (int)(i * 1.5f);
+                float interval = Mathf.Max(0.2f, 1.0f - (i * 0.02f));
+                
+                // 보스급 가고일 웨이브 (5웨이브 마다)
+                if (i % 5 == 4) { prefab = gargoylePrefab; count = 2 + i / 2; interval = 1.5f; }
+                // 기사 웨이브 (3웨이브 마다)
+                else if (i % 3 == 2) { prefab = knightPrefab; count = 3 + i / 3; interval = 1.2f; }
+
+                waves[i] = new WaveData { enemyPrefab = prefab, count = count, spawnInterval = interval };
+            }
         }
     }
 

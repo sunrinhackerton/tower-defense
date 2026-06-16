@@ -225,7 +225,6 @@ GameObject:
   - component: {fileID: 1798092701247039925}
   - component: {fileID: 4881645957883495427}
   - component: {fileID: 5642019996828492790}
-  - component: {fileID: 8871525760376210094}
   m_Layer: 0
   m_Name: Gargoyle
   m_TagString: Monster
@@ -379,18 +378,3 @@ MonoBehaviour:
   arrivalRadius: 0.15
   isFlying: 1
   isBlocked: 0
---- !u!114 &8871525760376210094
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3976032928419676836}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 35e3387de6290704fa42a9fe78d5fcdc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::HealthBar2D
-  barWidth: 0.85
-  barHeight: 0.12
-  offset: {x: 0, y: 0.68}

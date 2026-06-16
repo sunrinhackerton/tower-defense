@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
 
 /// <summary>
@@ -23,13 +24,41 @@ public class GameManager2D : MonoBehaviour
         DontDestroyOnLoad(gameObject);
         _currentCoins = startingCoins;
         UpdateCoinUI();
+        
+        // 초기 UI 셋업
+        if (titleScreenPanel != null) titleScreenPanel.SetActive(true);
+        if (inGameUIPanel != null) inGameUIPanel.SetActive(false);
+        
+        if (startGameBtn != null) startGameBtn.onClick.AddListener(StartGame);
+        if (quitGameBtn != null) quitGameBtn.onClick.AddListener(QuitGame);
+    }
+
+    // -------------------------------------------------------
+    // Game Flow (Title Screen)
+    // -------------------------------------------------------
+    [Header("Game Flow UI")]
+    public GameObject titleScreenPanel;
+    public GameObject inGameUIPanel;
+    public Button startGameBtn;
+    public Button quitGameBtn;
+
+    public void StartGame()
+    {
+        if (titleScreenPanel != null) titleScreenPanel.SetActive(false);
+        if (inGameUIPanel != null) inGameUIPanel.SetActive(true);
+        // 필요시 WaveManager 시작 신호 송신
+    }
+
+    public void QuitGame()
+    {
+        Application.Quit();
     }
 
     // -------------------------------------------------------
     // Economy
     // -------------------------------------------------------
     [Header("Economy")]
-    public int startingCoins = 300;
+    public int startingCoins = 50000;
 
     private int _currentCoins;
     public int CurrentCoins => _currentCoins;
@@ -70,6 +99,6 @@ public class GameManager2D : MonoBehaviour
     private void UpdateCoinUI()
     {
         if (coinText == null) return;
-        coinText.text = $"Coins: {_currentCoins}";
+        coinText.text = $"Coin : {_currentCoins} / A";
     }
 }
