@@ -9,5 +9,7 @@ public enum WeaponDamageType
 {
     Pierce,
     Splash,
-    Melee
+    Melee,
+    Debuff,
+    BossKiller
 }

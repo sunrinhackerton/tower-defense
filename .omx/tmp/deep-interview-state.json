@@ -1,0 +1,24 @@
+{
+    "active":  true,
+    "current_phase":  "deep-interview",
+    "mode":  "deep-interview",
+    "state":  {
+                  "codebase_context":  "preflight collected: managers, scene, prefabs, docs",
+                  "current_stage":  "intent-first",
+                  "current_focus":  "intent",
+                  "initial_idea":  "Tower - Player Control, Mob - WaveController, WaveController - Coin - Tower 상호작용 연결 기능 구현을 위한 Unity 프로젝트 분석 및 개발 계획",
+                  "profile":  "standard",
+                  "rounds":  [
+
+                             ],
+                  "type":  "brownfield",
+                  "challenge_modes_used":  [
+
+                                           ],
+                  "current_ambiguity":  1,
+                  "interview_id":  "56aca58c-daa2-4c0e-97ec-2af615d0cecd",
+                  "threshold":  0.2,
+                  "max_rounds":  12,
+                  "context_snapshot_path":  ".omx\\context\\tower-interactions-20260616T145059Z.md"
+              }
+}

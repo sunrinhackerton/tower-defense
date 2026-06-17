@@ -12,9 +12,12 @@ public class BuildManager2D : MonoBehaviour
     [Header("Build UI Panel (Left)")]
     public GameObject buildUIPanel;
     // Buttons for building
-    public Button buildBallistaBtn;
-    public Button buildCatapultBtn;
-    public Button buildBarracksBtn;
+    public Button buildBasicBtn;
+    public Button buildSniperBtn;
+    public Button buildAoEBtn;
+    public Button buildRapidBtn;
+    public Button buildDebuffBtn;
+    public Button buildBossBtn;
 
     [Header("Tower Info Panel (Right)")]
     public GameObject towerInfoPanel;
@@ -25,14 +28,20 @@ public class BuildManager2D : MonoBehaviour
     public Button closeInfoButton;
 
     [Header("Tower Prefabs")]
-    public GameObject ballistaPrefab;
-    public GameObject catapultPrefab;
-    public GameObject barracksPrefab;
+    public GameObject basicPrefab;
+    public GameObject sniperPrefab;
+    public GameObject aoePrefab;
+    public GameObject rapidPrefab;
+    public GameObject debuffPrefab;
+    public GameObject bossPrefab;
 
     [Header("Tower Costs")]
-    public int ballistaCost = 100;
-    public int catapultCost = 150;
-    public int barracksCost = 200;
+    public int basicCost = 100;
+    public int sniperCost = 250;
+    public int aoeCost = 300;
+    public int rapidCost = 150;
+    public int debuffCost = 200;
+    public int bossCost = 400;
 
     private BuildSite2D _currentSite;
     private Tower2D _selectedTower;
@@ -46,9 +55,12 @@ public class BuildManager2D : MonoBehaviour
         if (towerInfoPanel != null) towerInfoPanel.SetActive(false);
         
         // Setup Build Buttons
-        if(buildBallistaBtn) buildBallistaBtn.onClick.AddListener(BuildBallista);
-        if(buildCatapultBtn) buildCatapultBtn.onClick.AddListener(BuildCatapult);
-        if(buildBarracksBtn) buildBarracksBtn.onClick.AddListener(BuildBarracks);
+        if(buildBasicBtn) buildBasicBtn.onClick.AddListener(() => AttemptBuild(basicPrefab, basicCost));
+        if(buildSniperBtn) buildSniperBtn.onClick.AddListener(() => AttemptBuild(sniperPrefab, sniperCost));
+        if(buildAoEBtn) buildAoEBtn.onClick.AddListener(() => AttemptBuild(aoePrefab, aoeCost));
+        if(buildRapidBtn) buildRapidBtn.onClick.AddListener(() => AttemptBuild(rapidPrefab, rapidCost));
+        if(buildDebuffBtn) buildDebuffBtn.onClick.AddListener(() => AttemptBuild(debuffPrefab, debuffCost));
+        if(buildBossBtn) buildBossBtn.onClick.AddListener(() => AttemptBuild(bossPrefab, bossCost));
         
         // Setup Info Buttons
         if(closeInfoButton) closeInfoButton.onClick.AddListener(CloseAllUI);
@@ -70,9 +82,7 @@ public class BuildManager2D : MonoBehaviour
         }
     }
 
-    public void BuildBallista() { AttemptBuild(ballistaPrefab, ballistaCost); }
-    public void BuildCatapult() { AttemptBuild(catapultPrefab, catapultCost); }
-    public void BuildBarracks() { AttemptBuild(barracksPrefab, barracksCost); }
+    // removed old Build wrappers
 
     private void AttemptBuild(GameObject towerPrefab, int cost)
     {

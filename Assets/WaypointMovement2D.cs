@@ -12,6 +12,10 @@ public class WaypointMovement2D : MonoBehaviour
 
     [Header("Movement Options")]
     public float speed          = 3.5f;
+    [HideInInspector] public float baseSpeed;
+    [HideInInspector] public float slowMultiplier = 1f;
+    private float _slowTimer = 0f;
+
     public float arrivalRadius  = 0.15f;
     public bool  isFlying       = false; // If true, ignore intermediate waypoints
 
@@ -26,8 +30,23 @@ public class WaypointMovement2D : MonoBehaviour
     private Vector2 _flyEndPos;
     private bool _flyInitialized = false;
 
+    void Start()
+    {
+        baseSpeed = speed;
+    }
+
     void Update()
     {
+        if (_slowTimer > 0)
+        {
+            _slowTimer -= Time.deltaTime;
+            if (_slowTimer <= 0)
+            {
+                slowMultiplier = 1f;
+                speed = baseSpeed;
+            }
+        }
+
         if (_arrived || isBlocked || waypoints == null || waypoints.Length == 0) return;
 
         Transform target = waypoints[_wpIndex];
@@ -54,8 +73,21 @@ public class WaypointMovement2D : MonoBehaviour
         if (_wpIndex >= waypoints.Length)
         {
             _arrived = true;
-            Debug.Log("ㅁ쟈램ㅈㅁㅁ");
+            if (GameManager2D.Instance != null)
+            {
+                GameManager2D.Instance.TakeBaseDamage(1);
+            }
             Destroy(gameObject);
         }
+    }
+
+    public void ApplySlow(float factor, float duration)
+    {
+        if (factor < slowMultiplier) // Apply strongest slow
+        {
+            slowMultiplier = factor;
+            speed = baseSpeed * slowMultiplier;
+        }
+        _slowTimer = Mathf.Max(_slowTimer, duration);
     }
 }

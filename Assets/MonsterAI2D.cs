@@ -9,7 +9,7 @@ using UnityEngine;
 public class MonsterAI2D : MonoBehaviour, IDamageable
 {
     [Header("Stats")]
-    public int maxHP = 50;
+    public int maxHP = 150;
     public ArmorType armorType = ArmorType.Light;
 
     [Header("Kill Reward")]
@@ -18,6 +18,10 @@ public class MonsterAI2D : MonoBehaviour, IDamageable
     [Header("Visual Feedback")]
     public Color hitFlashColor = Color.white;
     public float flashDuration  = 0.08f;
+    
+    [Header("Debuff")]
+    public float slowFactor = 0.6f;
+    public float slowDuration = 3f;
     
     [Tooltip("The fill Transform of the world-space HP bar to scale on damage")]
     public Transform hpFill;
@@ -33,6 +37,17 @@ public class MonsterAI2D : MonoBehaviour, IDamageable
     // -------------------------------------------------------
     // IDamageable
     // -------------------------------------------------------
+    public void Init(int waveIndex)
+    {
+        float scaling = Mathf.Pow(1.25f, waveIndex); // increased scaling per wave
+        float multiplier = 1f;
+        if (armorType == ArmorType.Heavy) multiplier = 2.0f;
+        else if (armorType == ArmorType.Flying) multiplier = 6.0f; // bosses are much tougher
+
+        maxHP = Mathf.RoundToInt(maxHP * multiplier * scaling);
+        _currentHP = maxHP;
+    }
+
     public void TakeDamage(int damage, WeaponDamageType dmgType = WeaponDamageType.Pierce)
     {
         if (_dead) return;
@@ -47,9 +62,20 @@ public class MonsterAI2D : MonoBehaviour, IDamageable
         }
         else if (dmgType == WeaponDamageType.Splash)
         {
-            // Catapult (Splash) cannot target Flying natively, but if it somehow hits:
             if (armorType == ArmorType.Flying) finalDamage = 0;
             else if (armorType == ArmorType.Heavy) finalDamage = Mathf.Max(1, (int)(damage * 0.5f));
+        }
+        else if (dmgType == WeaponDamageType.BossKiller)
+        {
+            if (armorType == ArmorType.Heavy || armorType == ArmorType.Flying) finalDamage = damage * 2;
+        }
+        else if (dmgType == WeaponDamageType.Debuff)
+        {
+            WaypointMovement2D move = GetComponent<WaypointMovement2D>();
+            if (move != null)
+            {
+                move.ApplySlow(slowFactor, slowDuration);
+            }
         }
 
         if (finalDamage <= 0) return;

@@ -46,13 +46,13 @@ public class WaveManager2D : MonoBehaviour
             for (int i = 0; i < 30; i++)
             {
                 GameObject prefab = goblinPrefab;
-                int count = 5 + (int)(i * 1.5f);
-                float interval = Mathf.Max(0.1f, 0.5f - (i * 0.06f));
+                int count = 10 + i * 4; // Much larger swarms
+                float interval = 2.5f; // Pause between clusters
                 
                 // 보스급 가고일 웨이브 (5웨이브 마다)
-                if (i % 5 == 4) { prefab = gargoylePrefab; count = 2 + i / 2; interval = 1.5f; }
+                if (i % 5 == 4) { prefab = gargoylePrefab; count = 1 + i / 5; interval = 4.0f; }
                 // 기사 웨이브 (3웨이브 마다)
-                else if (i % 3 == 2) { prefab = knightPrefab; count = 3 + i / 3; interval = 1.2f; }
+                else if (i % 3 == 2) { prefab = knightPrefab; count = 5 + i; interval = 3.0f; }
 
                 waves[i] = new WaveData { enemyPrefab = prefab, count = count, spawnInterval = interval };
             }
@@ -86,26 +86,47 @@ public class WaveManager2D : MonoBehaviour
             UpdateUI();
             
             WaveData currentWave = waves[_currentWaveIndex];
-            for (int i = 0; i < currentWave.count; i++)
+            
+            // Cluster Spawning Logic
+            int clusterSize = 5; 
+            if (currentWave.enemyPrefab == gargoylePrefab) clusterSize = 1; // Bosses spawn individually
+            else if (currentWave.enemyPrefab == knightPrefab) clusterSize = 3;
+
+            int spawned = 0;
+            while (spawned < currentWave.count)
             {
-                SpawnEnemy(currentWave.enemyPrefab);
-                yield return new WaitForSeconds(currentWave.spawnInterval);
+                int toSpawn = Mathf.Min(clusterSize, currentWave.count - spawned);
+                for (int i = 0; i < toSpawn; i++)
+                {
+                    if (GameManager2D.Instance != null && GameManager2D.Instance.IsGameOver) yield break;
+
+                    SpawnEnemy(currentWave.enemyPrefab);
+                    spawned++;
+                    yield return new WaitForSeconds(0.2f); // Rapid spawn within cluster
+                }
+                
+                if (spawned < currentWave.count)
+                {
+                    yield return new WaitForSeconds(currentWave.spawnInterval); // Delay between clusters
+                }
             }
             
             while (_activeEnemies.Count > 0)
             {
+                if (GameManager2D.Instance != null && GameManager2D.Instance.IsGameOver) yield break;
                 yield return null;
             }
 
             _currentWaveIndex++;
-            if (_currentWaveIndex < waves.Length)
+            if (_currentWaveIndex < waves.Length && (GameManager2D.Instance == null || !GameManager2D.Instance.IsGameOver))
             {
                 if (waveText != null) waveText.text = "Wave Cleared! Next in " + waveDelay + "s...";
                 yield return new WaitForSeconds(waveDelay);
             }
         }
 
-        if (waveText != null) waveText.text = "All Waves Cleared!";
+        if (waveText != null && (GameManager2D.Instance == null || !GameManager2D.Instance.IsGameOver)) 
+            waveText.text = "All Waves Cleared!";
     }
 
     private void SpawnEnemy(GameObject prefab)
@@ -118,6 +139,9 @@ public class WaveManager2D : MonoBehaviour
 
         if (enemy.TryGetComponent<WaypointMovement2D>(out var wpm))
             wpm.waypoints = _waypoints;
+            
+        if (enemy.TryGetComponent<MonsterAI2D>(out var ai))
+            ai.Init(_currentWaveIndex);
     }
 
     private void UpdateUI()

@@ -22,8 +22,6 @@ public class GameManager2D : MonoBehaviour
         }
         Instance = this;
         DontDestroyOnLoad(gameObject);
-        _currentCoins = startingCoins;
-        UpdateCoinUI();
         
         // 초기 UI 셋업
         if (titleScreenPanel != null) titleScreenPanel.SetActive(true);
@@ -31,6 +29,14 @@ public class GameManager2D : MonoBehaviour
         
         if (startGameBtn != null) startGameBtn.onClick.AddListener(StartGame);
         if (quitGameBtn != null) quitGameBtn.onClick.AddListener(QuitGame);
+    }
+
+    void Start()
+    {
+        _currentCoins = startingCoins;
+        _currentLives = startingLives;
+        IsGameOver = false;
+        UpdateUI();
     }
 
     // -------------------------------------------------------
@@ -57,11 +63,15 @@ public class GameManager2D : MonoBehaviour
     // -------------------------------------------------------
     // Economy
     // -------------------------------------------------------
-    [Header("Economy")]
-    public int startingCoins = 50000;
+    [Header("Economy & Base")]
+    public int startingCoins = 500;
+    public int startingLives = 20;
 
     private int _currentCoins;
+    private int _currentLives;
     public int CurrentCoins => _currentCoins;
+    public int CurrentLives => _currentLives;
+    public bool IsGameOver { get; private set; }
 
     /// <summary>Award coins to the player (e.g. kill reward).</summary>
     public void AddCoins(int amount)
@@ -69,7 +79,7 @@ public class GameManager2D : MonoBehaviour
         if (amount <= 0) return;
         _currentCoins += amount;
         Debug.Log($"[Economy] +{amount} coins  |  Total: {_currentCoins}");
-        UpdateCoinUI();
+        UpdateUI();
     }
 
     /// <summary>
@@ -85,8 +95,28 @@ public class GameManager2D : MonoBehaviour
         }
         _currentCoins -= amount;
         Debug.Log($"[Economy] -{amount} coins  |  Remaining: {_currentCoins}");
-        UpdateCoinUI();
+        UpdateUI();
         return true;
+    }
+
+    public void TakeBaseDamage(int damage = 1)
+    {
+        if (IsGameOver) return;
+
+        _currentLives -= damage;
+        if (_currentLives <= 0)
+        {
+            _currentLives = 0;
+            IsGameOver = true;
+            Debug.Log("[GameManager] Game Over!");
+            if (WaveManager2D.Instance != null && WaveManager2D.Instance.waveText != null)
+            {
+                WaveManager2D.Instance.waveText.text = "Game Over!";
+                WaveManager2D.Instance.waveText.color = Color.red;
+                Time.timeScale = 0f; // Halt the game
+            }
+        }
+        UpdateUI();
     }
 
     // -------------------------------------------------------
@@ -96,9 +126,11 @@ public class GameManager2D : MonoBehaviour
     [Tooltip("Assign the TextMeshProUGUI component that shows the coin count.")]
     public TMP_Text coinText;
 
-    private void UpdateCoinUI()
+    private void UpdateUI()
     {
-        if (coinText == null) return;
-        coinText.text = $"Coin : {_currentCoins} / A";
+        if (coinText != null)
+        {
+            coinText.text = $"Coin :\n{_currentCoins} / A\nLives: {_currentLives}";
+        }
     }
 }

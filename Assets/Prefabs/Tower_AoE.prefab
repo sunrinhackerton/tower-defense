@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &5315790141089302183
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1959516068151692412}
+  m_Layer: 0
+  m_Name: MuzzlePoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1959516068151692412
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5315790141089302183}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.4, z: 0}
+  m_LocalScale: {x: 12.5, y: 12.5, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2115400808002797964}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5684297789150361537
 GameObject:
   m_ObjectHideFlags: 0
@@ -13,7 +44,7 @@ GameObject:
   - component: {fileID: 2259071565097467736}
   - component: {fileID: 2581033470239646817}
   m_Layer: 0
-  m_Name: Tower_Basic
+  m_Name: Tower_AoE
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -32,7 +63,7 @@ Transform:
   m_LocalScale: {x: 0.08, y: 0.08, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 7997880158309973789}
+  - {fileID: 1959516068151692412}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &7879098713376434845
@@ -84,8 +115,8 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 4007767879492476790, guid: 1882b3cbefe1e5147a5eabeb671047e8, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Sprite: {fileID: -8001873485898527501, guid: b0cb84eaf734d75429a7d754a227c967, type: 3}
+  m_Color: {r: 1, g: 0.5, b: 0, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -106,10 +137,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f47d61c1fa8de04bb3a981afb46ac71, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TowerTargeting2D
-  range: 4
+  range: 4.5
   enemyTag: Monster
   canTargetGround: 1
-  canTargetFlying: 1
+  canTargetFlying: 0
   currentTarget: {fileID: 0}
 --- !u!114 &2581033470239646817
 MonoBehaviour:
@@ -123,43 +154,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c756cd865dc90194fa4e6f60d3894112, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TowerWeapon2D
-  attackDamage: 15
-  attackDelay: 1
-  damageType: 2
-  splashRadius: 0
+  attackDamage: 30
+  attackDelay: 2
+  damageType: 1
+  splashRadius: 2
   projectilePrefab: {fileID: 9028668331120077335, guid: 4e8a82b77c9a3794984eae1d5995b295, type: 3}
-  muzzlePoint: {fileID: 7997880158309973789}
+  muzzlePoint: {fileID: 1959516068151692412}
   level: 1
   maxLevel: 5
-  baseUpgradeCost: 100
---- !u!1 &7625292947381797975
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 7997880158309973789}
-  m_Layer: 0
-  m_Name: MuzzlePoint
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &7997880158309973789
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7625292947381797975}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.4, z: 0}
-  m_LocalScale: {x: 12.5, y: 12.5, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 2115400808002797964}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  baseUpgradeCost: 300
