@@ -54,6 +54,7 @@ public class WaypointMovement2D : MonoBehaviour
         if (_wpIndex >= waypoints.Length)
         {
             _arrived = true;
+            Debug.Log("ㅁ쟈램ㅈㅁㅁ");
             Destroy(gameObject);
         }
     }

@@ -47,7 +47,7 @@ public class WaveManager2D : MonoBehaviour
             {
                 GameObject prefab = goblinPrefab;
                 int count = 5 + (int)(i * 1.5f);
-                float interval = Mathf.Max(0.2f, 1.0f - (i * 0.02f));
+                float interval = Mathf.Max(0.1f, 0.5f - (i * 0.06f));
                 
                 // 보스급 가고일 웨이브 (5웨이브 마다)
                 if (i % 5 == 4) { prefab = gargoylePrefab; count = 2 + i / 2; interval = 1.5f; }
